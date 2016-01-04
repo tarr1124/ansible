@@ -1,0 +1,35 @@
+- hosts: digitalocean
+  become: yes
+  tasks:
+   
+    - name: install epel
+      yum: name=http://ftp-srv2.kddilabs.jp/Linux/distributions/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+      become: yes
+
+    - include: tasks/peco.yml
+
+    - name: yum all update
+      yum: name=* state=latest
+      become: yes
+ 
+
+    - name: install via yum
+      yum: name="{{ item }}" state=latest
+      with_items:
+        - "@Development tools"
+        - zsh
+        - git
+        - vim
+        - jq
+        - tar
+        - gcc
+        - openssl-devel
+        - libyaml-devel
+        - libffi-devel
+        - readline-devel
+        - zlib-devel
+        - gdbm-devel
+        - ncurses-devel
+      become: yes
+
+    - include: tasks/dotfiles.yml
